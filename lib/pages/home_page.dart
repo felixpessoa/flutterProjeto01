@@ -22,29 +22,29 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ValueListenableBuilder<List<PostModel>>(
-              valueListenable: _controller.posts,
-              builder: (_, list, __) {
-                return ListView.builder(
-                  // physics: NeverScrollableScrollPhysics(),
-                  itemCount: list.length,
-                  itemBuilder: (_, idx) => ListTile(
-                    title: Text(list[idx].title),
-                  ),
-                );
-              },
+      appBar: AppBar(
+        title: Text('Home'),
+      ),
+      body: ValueListenableBuilder<List<PostModel>>(
+        valueListenable: _controller.posts,
+        builder: (_, list, __) {
+          return ListView.separated(
+            // physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: list.length,
+            itemBuilder: (_, idx) => ListTile(
+              leading: Text(list[idx].id.toString()),
+              trailing: Icon(Icons.arrow_forward),
+              title: Text(list[idx].title),
+              onTap: () => Navigator.of(context).pushNamed(
+                '/details',
+                arguments: list[idx],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () => _controller.fetch(),
-              child: Text('Reload'),
-            ),
-          ],
-        ),
+            separatorBuilder: (_, __) => Divider(),
+          );
+        },
       ),
     );
   }
