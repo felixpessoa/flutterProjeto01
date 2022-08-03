@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto01/models/post_model.dart';
 import 'package:projeto01/repositories/home_repository_imp.dart';
+import 'package:projeto01/services/prefs_service.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -23,9 +24,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
+      appBar: AppBar(title: Text('Home'), actions: [
+        IconButton(
+          onPressed: () {
+            PrefsService.logout();
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/login', (_) => true);
+          },
+          icon: Icon(Icons.logout),
+        )
+      ]),
       body: ValueListenableBuilder<List<PostModel>>(
         valueListenable: _controller.posts,
         builder: (_, list, __) {
